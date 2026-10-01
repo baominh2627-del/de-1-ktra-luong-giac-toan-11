@@ -1,0 +1,147 @@
+<!doctype html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ĐỀ 1 - LƯỢNG GIÁC - TOÁN 11</title>
+    <link rel="stylesheet" href="style.css" />
+    <!-- MathJax for rendering Math Formulas -->
+    <script>
+      MathJax = {
+        tex: {
+          inlineMath: [
+            ["$", "$"],
+            ["\\(", "\\)"],
+          ],
+        },
+        svg: { fontCache: "global" },
+      };
+    </script>
+    <script
+      id="MathJax-script"
+      async
+      src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"
+    ></script>
+  </head>
+  <body>
+    <!-- Màn hình Đăng nhập -->
+    <div id="login-screen" class="container">
+      <div class="exam-header-block" style="margin-bottom: 20px">
+        <div
+          class="exam-header-top"
+          style="
+            border-radius: 8px;
+            border-bottom: 1px solid var(--border-color);
+          "
+        >
+          <div class="meta-text">ĐỀ ÔN TẬP KẾT THÚC CHƯƠNG HSLG VÀ PTLG · NĂM HỌC 2024-2025</div>
+          <h1 class="exam-title">ĐỀ 1 - LƯỢNG GIÁC - TOÁN 11</h1>
+          <div class="meta-sub">
+            12 câu trắc nghiệm · 4 câu đúng/sai · 6 câu trả lời ngắn — thang
+            điểm 10
+          </div>
+          <hr class="dashed-line" />
+        </div>
+      </div>
+
+      <div class="card form-card">
+        <form id="login-form">
+          <div class="form-group">
+            <label for="student-name">Họ và tên: </label>
+            <input
+              type="text"
+              id="student-name"
+              placeholder="Nguyễn Văn A"
+              required
+            />
+          </div>
+
+          <div class="form-group">
+            <label for="student-class">Lớp/Nhóm: </label>
+            <input type="text" id="student-class" placeholder="11A1" required />
+          </div>
+
+          <div class="form-group">
+            <label for="exam-time">Thời gian làm bài (phút)</label>
+            <input type="number" id="exam-time" value="90" />
+          </div>
+
+          <button type="submit" class="btn-primary" style="margin-top: 10px">
+            Bắt đầu làm bài
+          </button>
+
+          <p class="form-note">
+            Khi hết giờ, bài làm sẽ tự động được nộp. Kết quả và đáp án sẽ hiển
+            thị ngay sau khi nộp bài.
+          </p>
+        </form>
+      </div>
+
+      <div class="page-footer">
+        Đề Toán 11 · tự động chấm điểm theo đúng barem & lưu kết quả
+      </div>
+    </div>
+
+    <!-- Màn hình Làm bài thi -->
+    <div id="exam-screen" class="hidden container">
+      <!-- Bảng điều hướng sticky (góc phải dưới) -->
+      <div id="board-container" class="board-card">
+        <h3>Bảng Điều Hướng</h3>
+        <div id="question-board" class="q-grid"></div>
+      </div>
+
+      <!-- Header Bài Thi -->
+      <div class="exam-header-block">
+        <div class="exam-header-top">
+          <div class="meta-text">KIỂM TRA 90 PHÚT · MÔN TOÁN 11</div>
+          <h1 class="exam-title">ĐỀ 1 - LƯỢNG GIÁC - TOÁN 11</h1>
+          <div class="meta-sub">
+            12 câu trắc nghiệm · 4 câu đúng/sai · 6 câu trả lời ngắn — thang
+            điểm 10
+          </div>
+          <hr class="dashed-line" />
+        </div>
+        <div class="exam-info-bar sticky">
+          <div class="student-info">
+            Thí sinh: <strong id="display-name" style="color: white"></strong> ·
+            Lớp <strong id="display-class" style="color: white"></strong>
+          </div>
+          <div class="progress-info">
+            <span id="answered-count">0/22</span> câu đã làm
+          </div>
+          <div class="timer-pill">
+            <span class="green-dot">●</span> <span id="countdown">90:00</span>
+          </div>
+          <div class="score-pill hidden" id="score-pill">
+            <span class="green-dot">✓</span> Điểm:
+            <span id="review-score">0</span>/10
+          </div>
+        </div>
+      </div>
+
+      <!-- Container câu hỏi -->
+      <div id="questions-container">
+        <!-- Render bằng JS -->
+      </div>
+
+      <div class="submit-container">
+        <button id="submit-btn" class="btn-primary">Nộp bài kiểm tra</button>
+      </div>
+    </div>
+
+    <div id="result-screen" class="hidden container">
+      <div class="card result-card">
+        <h2 style="font-family: var(--font-serif)">Kết Quả Bài Thi</h2>
+        <div class="score-display mono-font">
+          Điểm: <span id="final-score"></span>/10
+        </div>
+        <p>Số lần rời khỏi màn hình: <span id="cheat-display">0</span></p>
+        <!-- Trạng thái lưu Firebase -->
+        <p id="firebase-status" style="font-size: 14px; margin-top: 8px; color: #666;">⏳ Đang kết nối hệ thống lưu...</p>
+        <button id="review-btn" class="btn-primary">Xem lại bài làm</button>
+      </div>
+    </div>
+
+    <script type="module" src="script.js"></script>
+  </body>
+</html>
