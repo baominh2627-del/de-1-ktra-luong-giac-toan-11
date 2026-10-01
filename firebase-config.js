@@ -7,16 +7,16 @@ import {
   serverTimestamp,
 } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-database.js";
 
-// 🔥 Cấu hình Firebase project: luu-submitexam-a05-vl-12
+// 🔥 Cấu hình Firebase project: de-1-toan-11-luong
 const firebaseConfig = {
-  apiKey: "AIzaSyBKIwyzW6Yu9HRfslh1qIztql7CqSkFvKo",
-  authDomain: "luu-submitexam-a05-vl-12.firebaseapp.com",
-  databaseURL: "https://luu-submitexam-a05-vl-12-default-rtdb.asia-southeast1.firebasedatabase.app",
-  projectId: "luu-submitexam-a05-vl-12",
-  storageBucket: "luu-submitexam-a05-vl-12.firebasestorage.app",
-  messagingSenderId: "499179183740",
-  appId: "1:499179183740:web:c85a952b1713277c14b3f9",
-  measurementId: "G-32S8C8SYDY"
+  apiKey: "AIzaSyAR85Kn7-4X2UFsRZdnYUI7AAV3exM-n4I",
+  authDomain: "de-1-toan-11-luong.firebaseapp.com",
+  databaseURL: "https://de-1-toan-11-luong-default-rtdb.asia-southeast1.firebasedatabase.app",
+  projectId: "de-1-toan-11-luong",
+  storageBucket: "de-1-toan-11-luong.firebasestorage.app",
+  messagingSenderId: "328212820320",
+  appId: "1:328212820320:web:35fa8c665e25332e942e05",
+  measurementId: "G-Q0RLM1HHL6"
 };
 
 const app = initializeApp(firebaseConfig);
