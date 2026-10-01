@@ -219,7 +219,7 @@ export const examData = [
   {
     id: "p3_2",
     part: 3,
-    question: "",
+    question: "Một sợi cáp $R$ được gắn vào một cột thẳng đứng ở vị trí cách mặt đất $33m$. Một sợi cáp $S$ khác cũng được gắn vào cột đó ở vị trí cách mặt đất $25m$. Biết rằng hai sợi cáp trên cùng được gắn với mặt đất tại một vị trí cách chân cột $35m$. Gọi $\\alpha$ là góc giữa hai sợi cáp trên. Biết $\\tan \\alpha = \\frac{a}{b}$ với $a, b \\in \\mathbb{Z}$, $\\frac{a}{b}$ tối giản. Tính $10a + 4b$.",
     image: "img/anh-cau2-phan3.png",
     correctAnswer: "1100",
     explanation: "Sau khi tính toán, ta có $a = 28$, $b = 205$. Suy ra $10a + 4b = 10(28) + 4(205) = 280 + 820 = 1100$."
