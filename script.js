@@ -1,4 +1,4 @@
-import { examData } from "./data.js";
+import { examData } from "./data.js?v=2";
 import { db, ref, push, set, serverTimestamp } from "./firebase-config.js";
 
 const loginScreen = document.getElementById("login-screen");
