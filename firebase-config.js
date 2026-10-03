@@ -4,22 +4,23 @@ import {
   ref,
   push,
   set,
+  update,
   serverTimestamp,
 } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-database.js";
 
-// 🔥 Cấu hình Firebase project: de-1-toan-11-luong
+// 🔥 Cấu hình Firebase project: MTSedu
 const firebaseConfig = {
-  apiKey: "AIzaSyAR85Kn7-4X2UFsRZdnYUI7AAV3exM-n4I",
-  authDomain: "de-1-toan-11-luong.firebaseapp.com",
-  databaseURL: "https://de-1-toan-11-luong-default-rtdb.asia-southeast1.firebasedatabase.app",
-  projectId: "de-1-toan-11-luong",
-  storageBucket: "de-1-toan-11-luong.firebasestorage.app",
-  messagingSenderId: "328212820320",
-  appId: "1:328212820320:web:35fa8c665e25332e942e05",
-  measurementId: "G-Q0RLM1HHL6"
+  apiKey: "AIzaSyC8AT2g3vS54-Qco3uU36xYsXN04trj0Yw",
+  authDomain: "mtsedu-85ea3.firebaseapp.com",
+  databaseURL: "https://mtsedu-85ea3-default-rtdb.asia-southeast1.firebasedatabase.app",
+  projectId: "mtsedu-85ea3",
+  storageBucket: "mtsedu-85ea3.firebasestorage.app",
+  messagingSenderId: "73617729802",
+  appId: "1:73617729802:web:e7fa3c3c3b9ded7522f2f3",
+  measurementId: "G-JHQC9DSKY5"
 };
 
 const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
 
-export { db, ref, push, set, serverTimestamp };
+export { db, ref, push, set, update, serverTimestamp };

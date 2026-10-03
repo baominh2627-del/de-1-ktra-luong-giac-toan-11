@@ -501,12 +501,13 @@ async function saveExamResultToFirebase(
   soLanThoat,
 ) {
   const statusEl = document.getElementById("firebase-status");
-  if (statusEl) statusEl.innerText = "⏳ Đang lưu kết quả lên hệ thống...";
+  if (statusEl) statusEl.innerText = "⏳ Đang đồng bộ kết quả lên MTSedu...";
 
   try {
-    const ketQuaRef = ref(db, `ketQua/${MA_DE}`);
-    const newEntryRef = push(ketQuaRef);
-    await set(newEntryRef, {
+    const session = getMTSeduSession();
+    const userId = session ? session.id : null;
+
+    const resultData = {
       hoTen: studentName,
       lop: studentClass,
       maDe: MA_DE,
@@ -515,12 +516,27 @@ async function saveExamResultToFirebase(
       diemPhan3: diemPhan3,
       tongDiem: tongDiem,
       soLanThoat: soLanThoat,
+      userId: userId || "unknown",
       thoiGianNop: new Date().toISOString(),
       serverTimestamp: serverTimestamp(),
-    });
+    };
+
+    const updates = {};
+    const newResultId = push(ref(db, `testResults/${MA_DE}`)).key;
+
+    // 1. Lưu vào danh sách kết quả của bài thi này
+    updates[`testResults/${MA_DE}/${newResultId}`] = resultData;
+    
+    // 2. Lưu vào hồ sơ người dùng (để xem lịch sử trên MTSedu)
+    if (userId) {
+      updates[`users/${userId}/results/${newResultId}`] = resultData;
+    }
+
+    await update(ref(db), updates);
+
     if (statusEl) {
       statusEl.style.color = "green";
-      statusEl.innerText = "✅ Kết quả đã được lưu thành công!";
+      statusEl.innerText = "✅ Kết quả đã được đồng bộ thành công!";
     }
   } catch (error) {
     console.error("❌ Lỗi lưu kết quả:", error);
