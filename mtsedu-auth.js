@@ -1,33 +1,62 @@
 /**
  * mtsedu-auth.js - Module xác thực chung cho tất cả bài thi
  * 
- * Đọc session đăng nhập từ MTSedu (localStorage 'userSession')
- * và cung cấp thông tin học sinh để các bài thi dùng tự động.
+ * Đọc session từ URL params (truyền từ MTSedu khi click bài thi)
+ * hoặc từ localStorage (sau khi đã lưu lần đầu).
  * 
- * Cách dùng trong script.js của từng bài thi:
- *   import { getMTSeduSession, showLoginRequired } from './mtsedu-auth.js';
- *   const session = getMTSeduSession(); // { displayName, username, id, ... }
+ * localStorage bị cô lập theo domain nên cần truyền qua URL params.
  */
 
+const SESSION_KEY = 'mtsedu_session';
+
 /**
- * Lấy thông tin session đăng nhập từ MTSedu
- * @returns {object|null} - User object hoặc null nếu chưa đăng nhập
+ * Lấy thông tin session — ưu tiên URL params → localStorage
+ * @returns {object|null}
  */
 export function getMTSeduSession() {
+  // 1. Đọc từ URL params (khi mới click từ MTSedu vào)
+  const params = new URLSearchParams(window.location.search);
+  const urlUsername = params.get('mtsedu_user');
+  const urlName = params.get('mtsedu_name');
+  const urlId = params.get('mtsedu_id');
+  const returnUrl = params.get('mtsedu_return');
+
+  if (urlUsername) {
+    const session = {
+      username: urlUsername,
+      displayName: urlName || urlUsername,
+      id: urlId || ('user_' + urlUsername),
+      returnUrl: returnUrl || 'https://mtsedu.vercel.app'
+    };
+    // Lưu vào localStorage của domain quiz để F5 không bị mất
+    try {
+      localStorage.setItem(SESSION_KEY, JSON.stringify(session));
+    } catch {}
+    return session;
+  }
+
+  // 2. Đọc từ localStorage (sau khi đã lưu từ URL params lần trước)
   try {
-    const raw = localStorage.getItem('userSession');
+    const raw = localStorage.getItem(SESSION_KEY);
     if (!raw) return null;
     const user = JSON.parse(raw);
-    // Kiểm tra session hợp lệ (phải có username)
-    if (!user || !user.username) return null;
-    return user;
+    return (user && user.username) ? user : null;
   } catch {
     return null;
   }
 }
 
 /**
- * Kiểm tra xem người dùng đã đăng nhập chưa
+ * Lấy URL quay lại MTSedu
+ * @returns {string}
+ */
+export function getReturnUrl() {
+  const session = getMTSeduSession();
+  return (session && session.returnUrl) ? session.returnUrl : 'https://mtsedu.vercel.app';
+}
+
+/**
+ * Kiểm tra đăng nhập
  * @returns {boolean}
  */
 export function isLoggedIn() {
@@ -35,45 +64,33 @@ export function isLoggedIn() {
 }
 
 /**
- * Lấy tên hiển thị của học sinh đã đăng nhập
- * @returns {string} - Tên hiển thị hoặc chuỗi rỗng
+ * Lấy tên hiển thị
+ * @returns {string}
  */
 export function getStudentName() {
-  const session = getMTSeduSession();
-  return session ? (session.displayName || session.username) : '';
+  const s = getMTSeduSession();
+  return s ? (s.displayName || s.username) : '';
 }
 
 /**
- * Lấy username (tên tài khoản) của học sinh
- * @returns {string}
+ * Xóa session khỏi localStorage (dùng khi muốn đăng xuất từ trang quiz)
  */
-export function getStudentUsername() {
-  const session = getMTSeduSession();
-  return session ? session.username : '';
+export function clearSession() {
+  try { localStorage.removeItem(SESSION_KEY); } catch {}
 }
 
 /**
- * Lấy ID của học sinh (để lưu Firebase theo đúng user)
- * @returns {string}
+ * Hiển thị màn hình yêu cầu đăng nhập
+ * @param {HTMLElement} container - Element chứa form đăng nhập
+ * @param {string} returnHash - Hash của trang MTSedu để quay lại (vd: '#math')
  */
-export function getStudentId() {
-  const session = getMTSeduSession();
-  return session ? session.id : '';
-}
+export function showLoginRequired(container, returnHash = '') {
+  const mtseduUrl = 'https://mtsedu.vercel.app/' + returnHash;
 
-/**
- * Hiển thị màn hình yêu cầu đăng nhập thay vì form nhập tay
- * Chèn vào loginContainer nếu chưa đăng nhập
- * @param {HTMLElement} loginContainer - Element chứa form đăng nhập
- * @param {string} returnUrl - URL trang MTSedu để quay lại (tùy chọn)
- */
-export function showLoginRequired(loginContainer, returnUrl) {
-  const mtseduUrl = returnUrl || 'https://mtsedu.vercel.app/#math';
-  
-  loginContainer.innerHTML = `
+  container.innerHTML = `
     <div style="
       max-width: 480px;
-      margin: 60px auto;
+      margin: 0 auto;
       padding: 36px;
       background: white;
       border-radius: 16px;
@@ -97,8 +114,7 @@ export function showLoginRequired(loginContainer, returnUrl) {
         border-radius: 10px;
         font-size: 15px;
         font-weight: 600;
-        transition: background 0.2s;
-      " onmouseover="this.style.background='#333'" onmouseout="this.style.background='#000'">
+      ">
         Đăng nhập tại MTS Education →
       </a>
       <p style="margin-top: 20px; font-size: 13px; color: #999;">
@@ -106,4 +122,41 @@ export function showLoginRequired(loginContainer, returnUrl) {
       </p>
     </div>
   `;
+}
+
+/**
+ * Tạo nút "Quay lại trang chủ" và chèn vào đầu trang
+ * Tự động lấy URL quay lại từ session
+ */
+export function insertBackButton() {
+  const session = getMTSeduSession();
+  const returnUrl = (session && session.returnUrl) ? session.returnUrl : 'https://mtsedu.vercel.app';
+
+  const btn = document.createElement('div');
+  btn.id = 'mtsedu-back-btn';
+  btn.innerHTML = `
+    <a href="${returnUrl}" style="
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      position: fixed;
+      top: 14px;
+      left: 14px;
+      z-index: 9999;
+      background: rgba(0,0,0,0.85);
+      color: white;
+      text-decoration: none;
+      padding: 9px 18px;
+      border-radius: 50px;
+      font-size: 14px;
+      font-weight: 600;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      backdrop-filter: blur(8px);
+      box-shadow: 0 2px 12px rgba(0,0,0,0.3);
+      transition: background 0.2s;
+    " onmouseover="this.style.background='rgba(0,0,0,1)'" onmouseout="this.style.background='rgba(0,0,0,0.85)'">
+      ← Trang chủ
+    </a>
+  `;
+  document.body.appendChild(btn);
 }
