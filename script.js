@@ -1,5 +1,5 @@
 import { examData } from "./data.js?v=2";
-import { db, ref, push, set, serverTimestamp } from "./firebase-config.js";
+import { db, ref, push, set, update, serverTimestamp } from "./firebase-config.js";
 import { getMTSeduSession, showLoginRequired, insertBackButton } from "./mtsedu-auth.js";
 
 const loginScreen = document.getElementById("login-screen");
