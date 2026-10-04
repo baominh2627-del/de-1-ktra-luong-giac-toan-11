@@ -39,13 +39,16 @@ window.addEventListener("DOMContentLoaded", () => {
   // Thêm nút quay lại trang chủ MTSedu
   insertBackButton();
 
-  // Kiểm tra bản nháp còn lại
-  const draft = JSON.parse(localStorage.getItem("examDraft_TOAN11_DE1"));
-  if (draft && !draft.isFinished && draft.studentName === studentName) {
-    loadDraftAndContinue(draft);
-  } else {
-    document.getElementById("btn-start-exam").addEventListener("click", () => {
-      startExamDirectly();
+  // Luôn hiện bảng hướng dẫn trước, chờ người dùng bấm nút xác nhận
+  const btnStart = document.getElementById("btn-start-exam");
+  if (btnStart) {
+    btnStart.addEventListener("click", () => {
+      const draft = JSON.parse(localStorage.getItem("examDraft_TOAN11_DE1"));
+      if (draft && !draft.isFinished && draft.studentName === studentName) {
+        loadDraftAndContinue(draft);
+      } else {
+        startExamDirectly();
+      }
     });
   }
 });
