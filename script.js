@@ -44,8 +44,9 @@ window.addEventListener("DOMContentLoaded", () => {
   if (draft && !draft.isFinished && draft.studentName === studentName) {
     loadDraftAndContinue(draft);
   } else {
-    // Tự động bắt đầu bài thi không cần form
-    startExamDirectly();
+    document.getElementById("btn-start-exam").addEventListener("click", () => {
+      startExamDirectly();
+    });
   }
 });
 
