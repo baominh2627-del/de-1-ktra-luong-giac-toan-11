@@ -424,19 +424,13 @@ function submitExam() {
         .classList.add("correct-ans");
       if (selected === q.correctAnswer) {
         totalScore += 0.25;
-        diemPhan1 += 0.25; correctness[q.id] = true; } else { correctness[q.id] = false; if (selected !== undefined) {
-        document
-          .getElementById(`lbl-${q.id}-${selected}`)
-          .classList.add("wrong-ans");
-      }
+        diemPhan1 += 0.25; correctness[q.id] = true; } else { correctness[q.id] = false; if (selected !== undefined) { document.getElementById(`lbl-${q.id}-${selected}`).classList.add("wrong-ans"); } }
     } else if (q.part === 2) {
       let cCount = 0; correctness[q.id] = {}; q.statements.forEach((stmt, idx) => {
         const row = document.getElementById(`row-${q.id}-${idx}`);
         const ans = userAnswers[q.id] ? userAnswers[q.id][idx] : null;
         if (ans === stmt.correct.toString()) {
-          cCount++; row.classList.add("correct-ans"); correctness[q.id][idx] = true; } else { correctness[q.id][idx] = false; if (ans !== null) {
-          row.classList.add("wrong-ans");
-        }
+          cCount++; row.classList.add("correct-ans"); correctness[q.id][idx] = true; } else { correctness[q.id][idx] = false; if (ans !== null) { row.classList.add("wrong-ans"); } }
       });
       if (cCount === 4) {
         totalScore += 1.0;
@@ -534,4 +528,6 @@ document.getElementById("review-btn").addEventListener("click", () => {
   examScreen.classList.remove("hidden");
   window.scrollTo({ top: 0, behavior: "smooth" });
 });
+
+
 
