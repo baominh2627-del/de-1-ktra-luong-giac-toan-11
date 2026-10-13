@@ -72,13 +72,6 @@
 
     <!-- Màn hình Làm bài thi -->
     <div id="exam-screen" class="hidden container">
-      <!-- Bảng điều hướng sticky (góc phải dưới) -->
-      <div id="board-container" class="board-card">
-        <h3>Bảng Điều Hướng</h3>
-        <div id="question-board" class="q-grid"></div>
-      </div>
-
-      <!-- Header Bài Thi -->
       <div class="exam-header-block">
         <div class="exam-header-top">
           <div class="meta-text">KIỂM TRA 90 PHÚT · MÔN TOÁN 11</div>
@@ -89,29 +82,29 @@
           </div>
           <hr class="dashed-line" />
         </div>
-        <div class="exam-info-bar sticky">
+      </div>
+      <div class="top-sticky">
+        <div class="exam-info-bar">
           <div class="student-info">
             Thí sinh: <strong id="display-name" style="color: white"></strong> ·
             Lớp <strong id="display-class" style="color: white"></strong>
           </div>
-          <div class="progress-info">
-            <span id="answered-count">0/22</span> câu đã làm
-          </div>
+          <div class="progress-info"><span id="answered-count">0/22</span> câu đã làm</div>
           <div class="timer-pill">
             <span class="green-dot">●</span> <span id="countdown">90:00</span>
           </div>
           <div class="score-pill hidden" id="score-pill">
-            <span class="green-dot">✓</span> Điểm:
-            <span id="review-score">0</span>/10
+            <span class="green-dot">✓</span> Điểm: <span id="review-score">0</span>/10
           </div>
         </div>
+        <div id="board-container">
+          <div id="question-board">
+            <div class="q-grid"></div>
+          </div>
+          <button id="board-expand" type="button" title="Mở rộng" aria-expanded="false">▼</button>
+        </div>
       </div>
-
-      <!-- Container câu hỏi -->
-      <div id="questions-container">
-        <!-- Render bằng JS -->
-      </div>
-
+      <div id="questions-container"></div>
       <div class="submit-container">
         <button id="submit-btn" class="btn-primary">Nộp bài kiểm tra</button>
       </div>
@@ -131,5 +124,17 @@
     </div>
 
     <script type="module" src="script.js"></script>
+    <script>
+      document.addEventListener("click", function (e) {
+        var board = document.getElementById("board-container");
+        var btn = document.getElementById("board-expand");
+        if (!board || !btn) return;
+        if (e.target === btn || btn.contains(e.target)) {
+          var expanded = board.classList.toggle("expanded");
+          btn.textContent = expanded ? "▲" : "▼";
+          btn.setAttribute("aria-expanded", expanded);
+        }
+      });
+    </script>
   </body>
 </html>

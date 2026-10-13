@@ -230,13 +230,8 @@ function renderExam() {
 
 function renderBoard() {
   if (!questionBoard) return;
-  questionBoard.innerHTML = "";
-
-  let boardHTML = `<div class="board-legend">
-    <span class="box"></span><span class="box-label">Chưa làm</span>
-    <span class="box done"></span><span class="box-label">Đã làm</span>
-    <span class="box flagged"></span><span class="box-label">Đánh dấu</span>
-  </div>`;
+  const grid = questionBoard.querySelector(".q-grid") || questionBoard;
+  grid.innerHTML = "";
 
   examData.forEach((q, index) => {
     const box = document.createElement("button");
@@ -250,7 +245,7 @@ function renderBoard() {
         .getElementById(`q-card-${q.id}`)
         .scrollIntoView({ behavior: "smooth", block: "center" });
     });
-    questionBoard.appendChild(box);
+    grid.appendChild(box);
   });
   updateBoard();
 }
